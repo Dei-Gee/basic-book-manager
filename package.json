@@ -4,11 +4,12 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "dev": "./node_modules/.bin/concurrently \"npm run server\" \"npm run client\"",
-    "server": "node dist/server.js",
-    "dev-server": "nodemon src/server.ts --ignore client",
+    "build": "tsc -p .",
     "client": "npm start --prefix client",
     "client-install": "cd client && npm install",
+    "dev": "./node_modules/.bin/concurrently \"npm run dev-server\" \"npm run client\"",
+    "dev-server": "npm run build && nodemon dist/server.js --ignore client",
+    "server": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
