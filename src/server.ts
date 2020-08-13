@@ -1,3 +1,4 @@
+require('dotenv').config();
 import express, { Application, Request, Response, NextFunction } from 'express';
 
 const cors = require('cors');
