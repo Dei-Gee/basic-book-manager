@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 const Books = (props) => {
@@ -14,16 +14,18 @@ const Books = (props) => {
             .get('books')
             .then(response => {
                 setAllBooks(response.data);
-                console.log(response.data);
             })
             .catch(err => console.log(err));
           }, 1000);
-        
+
+        // clearing interval
+        return () => clearInterval(timer);
     }, []);
 
     // display details about book
 
     const handleClick = async (e) => {
+        e.preventDefault();
         console.log(e.target.getAttribute('_id'));
 
         let bookId = e.target.getAttribute('_id');
@@ -32,7 +34,7 @@ const Books = (props) => {
         let thisBook = {};
         let thisBookAuthor = {};
 
-        axios
+        await axios
             .get(`author/${authorId}`)
             .then(response => {
                 thisBookAuthor = {
@@ -61,14 +63,45 @@ const Books = (props) => {
             });
     }
 
+    const handleAddBookClick = async (e) => {
+        let authors = [];
+        await axios
+            .get('authors')
+            .then(response => {
+                response.data.map((r) => {
+                    authors.push(r);
+                })
+            })
+            .catch(err => console.log(err));
+
+            console.log(authors);
+            
+            if(authors.length > 0)
+            {
+                await props.history.push('book', 
+                {
+                    authors: authors
+                })
+            }
+    }
+
     return(
         <div className="container">
             <h4 className="sub-header">List of Books</h4>
+            <Navbar bg="secondary" expand="lg">
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="w-100 bg-secondary">
+                        <Nav.Link href="/book" className="text-light" onClick={handleAddBookClick}>Add Book</Nav.Link>
+                        <Nav.Link href="/author" className="text-light">Add Author</Nav.Link>
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
 
             <ListGroup variant="flush">
                 {
                     allBooks.map((book, index) => {
-                        return <ListGroup.Item key={index} _id={book._id} authorid={book.author} action onClick={handleClick}>{book.name}</ListGroup.Item>
+                        return <ListGroup.Item className="text-success" key={index} _id={book._id} authorid={book.author} action onClick={handleClick}>{book.name}</ListGroup.Item>
                     })
                 }
             </ListGroup>

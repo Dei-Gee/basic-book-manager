@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from 'react-bootstrap';
-import axios from 'axios';
+import { Card, Button } from 'react-bootstrap';
 import { isNull } from 'util';
-import AuthorDetails from './AuthorDetails';
 
 const BookDetails = (props) => {
     // set state
@@ -11,11 +9,17 @@ const BookDetails = (props) => {
 
     // get details of book
     useEffect(() => {
-        setBook(props.location.state.book);
-        setAuthor(props.location.state.author);
+
+        let isMounted = true; // note this flag denote mount status
+        if(isMounted)
+        {
+            setBook(props.location.state.book);
+            setAuthor(props.location.state.author);
+        }
+        return () => { isMounted = false }; // use effect cleanup to set flag false, if unmounted
+
         
     }, []);
-    console.log(book.name);
 
     if(book != {} || book != null || !isNull(book))
     {
@@ -31,6 +35,8 @@ const BookDetails = (props) => {
                     <Card.Text>
                         This book was written by {author.firstName} {author.lastName}
                     </Card.Text>
+
+                    <Button variant="outline-success text-white" href="/">Back to Homepage</Button>
                 </Card.Body>
             </Card>
         </div>

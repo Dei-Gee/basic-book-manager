@@ -16,6 +16,13 @@ const app:Application = express();
 //use routes
 app.options('*', cors()); // preflight OPTIONS; put before other routes
 
+//   BodyParser Middleware
+app.use(bodyParser.urlencoded({
+    extended:false
+}));
+app.use(bodyParser.json());
+
+
 app.use(express.static('static'))
 
 app.get('/', (req:Request, res:Response) => {
@@ -44,12 +51,6 @@ app.use((req: Request, res:Response, next:NextFunction) => {
     // Pass to next layer of middleware
     next();
 });
-
-//   BodyParser Middleware
-app.use(bodyParser.urlencoded({
-    extended:true
-}));
-app.use(bodyParser.json());
 
 
 // mongodb connection via mongoose
