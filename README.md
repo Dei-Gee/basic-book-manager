@@ -15,7 +15,7 @@ MongoDB (Database - hosted on mlab)
 * npm run dev-server (runs only the backend)\
 
 ## Commentary
-    I was able to implement most of the requirements here [Holidog Full Stack Challenge](https://github.com/Holidog-com/Full-stack-challenge). The api endpoints all work perfectly. I didn't have time to implement the\
+I was able to implement most of the requirements here [Holidog Full Stack Challenge](https://github.com/Holidog-com/Full-stack-challenge). The api endpoints all work >perfectly. I didn't have time to implement the\
 bonus api endpoints (i.e. for PUT requests).
 
 #### Problems (Bugs, Errors and Warnings)
