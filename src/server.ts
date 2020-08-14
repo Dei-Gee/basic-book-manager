@@ -1,13 +1,31 @@
 require('dotenv').config();
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Application, Request, Response, NextFunction, Router } from 'express';
+import path from 'path';
 
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const database = require('./config/keys').mongoURI;
+const mongoose = require('mongoose');
+
+// routers
+const authorsRouter:Router = require('./routes/api/authors');
+const booksRouter:Router = require('./routes/api/books');
 
 const app:Application = express();
 
 //use routes
 app.options('*', cors()); // preflight OPTIONS; put before other routes
+
+app.use(express.static('static'))
+
+app.get('/', (req:Request, res:Response) => {
+    res
+        .sendFile(path.join(__dirname+'index.html'));
+});
+
+
+app.use('', booksRouter);
+app.use('', authorsRouter);
 
 
 app.use((req: Request, res:Response, next:NextFunction) => {
@@ -27,19 +45,18 @@ app.use((req: Request, res:Response, next:NextFunction) => {
     next();
 });
 
-app.get('/', (req: Request, res:Response) => {
-    res.send('Hello World!');
-});
-
 //   BodyParser Middleware
 app.use(bodyParser.urlencoded({
     extended:true
 }));
 app.use(bodyParser.json());
 
-// api endpoints
 
 // mongodb connection via mongoose
+mongoose
+.connect(database,  { useNewUrlParser: true })
+.then(() => console.log('MongoDB connected!'))
+.catch((err: any) => console.log(err));
 
 // port: The app(server) will listen on this port
 const port = process.env.PORT || 5000;

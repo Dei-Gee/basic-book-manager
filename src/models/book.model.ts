@@ -19,4 +19,4 @@ const BookSchema:Schema = new Schema({
 })
 
 // export the model according to the schema based on the interface
-export default mongoose.model<IBook>('Book', BookSchema);
+module.exports = mongoose.model<IBook>('Book', BookSchema);

@@ -14,4 +14,4 @@ const AuthorSchema:Schema = new Schema({
 });
 
 // export the model according to the new schema based on the interface
-export default mongoose.model<IAuthor>('Author', AuthorSchema);
+module.exports = mongoose.model<IAuthor>('Author', AuthorSchema);

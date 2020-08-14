@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style.css">
+        <title>Book Manager API</title>
+    </head>
+
+    <body>
+        <h1 style="text-align: center;">This code is being served via Express engine!</h1>
+        <h3 style="text-align: center;">Documentation for the Book Manager API</h3>
+
+        <table>
+            <tr>
+              <th>Path</th>
+              <th>Details</th>
+              <th>Request-type</th>
+            </tr>
+            <tr>
+              <td><a href="/books">/books</a></td>
+              <td>Returns a list of books in the database in JSON format</td>
+              <td>GET</td>
+            </tr>
+            <tr>
+              <td>/book/{{id}}</td>
+              <td>Returns a detail view of the specified book id. Nest author details in JSON format</td>
+              <td>GET</td>
+            </tr>
+            <tr>
+              <td><a href="/authors">/authors</a></td>
+              <td>Returns a list of authors in the database in JSON format</td>
+              <td>GET</td>
+            </tr>
+            <tr>
+              <td>/author/{{id}}</td>
+              <td>Returns a detail view of the specified author id</td>
+              <td>GET</td>
+            </tr>
+            <tr>
+              <td>/author</td>
+              <td>Creates a new author with the specified details - Expects a JSON body</td>
+              <td>POST</td>
+            </tr>
+            <tr>
+              <td>/book</td>
+              <td>Creates a new book with the specified details - Expects a JSON body</td>
+              <td>POST</td>
+            </tr>
+          </table>
+    </body>
+</html>
