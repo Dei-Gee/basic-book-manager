@@ -15,8 +15,7 @@ MongoDB (Database - hosted on mlab)
 * npm run dev-server (runs only the backend)\
 
 ## Commentary
-    I was able to implement most of the requirements here [Holidog Full Stack Challenge](https://github.com/Holidog-com/Full-stack-challenge). The api endpoints all work perfectly. I didn't have time to implement the\
-bonus api endpoints (i.e. for PUT requests).
+I was able to implement most of the requirements here [Holidog Full Stack Challenge](https://github.com/Holidog-com/Full-stack-challenge). The api endpoints all work >perfectly. I didn't have time to implement the bonus api endpoints (i.e. for PUT requests).
 
 #### Problems (Bugs, Errors and Warnings)
 * There is a bug that occurs when you go from the 'book list' to the 'add book' form. For some reason, the state returns undefined when I push the array of books to the state of the 'add book' component. There is a most\
