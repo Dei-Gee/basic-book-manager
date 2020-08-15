@@ -22,7 +22,7 @@ const AddAuthor = (props) => {
         await axios
         .post('/author', newAuthor)
         .then(response => {
-            if(!isNull(response.data) && response.status == 200)
+            if(!isNull(response.data) && response.status === 200)
             {
                 setShow(true);
 
@@ -55,7 +55,7 @@ const AddAuthor = (props) => {
                     show == true ? 
                     <Alert variant="success" onClose={() => setShow(false)}>
                         Author {firstName} {lastName} added to database!
-                    </Alert> : <hidden></hidden>
+                    </Alert> : <br />
                 }
             
                 <Button variant="success" type="submit" onClick={handleAddAuthor}>

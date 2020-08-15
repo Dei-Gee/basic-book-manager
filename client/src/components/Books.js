@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ListGroup, Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import axios from 'axios';
+import { isNull } from 'util';
 
 const Books = (props) => {
     // set state
@@ -64,25 +65,24 @@ const Books = (props) => {
     }
 
     const handleAddBookClick = async (e) => {
-        let authors = [];
+        e.preventDefault();
+        // let authorsArray = [];
         await axios
             .get('authors')
             .then(response => {
-                response.data.map((r) => {
-                    authors.push(r);
-                })
-            })
-            .catch(err => console.log(err));
-
-            console.log(authors);
-            
-            if(authors.length > 0)
-            {
-                await props.history.push('book', 
+                if(!isNull(response.data) && response.status === 200)
                 {
-                    authors: authors
-                })
-            }
+                    props.history.push({
+                        pathname: 'book', 
+                        state: {
+                         authors: response.data
+                        }
+                    })
+                }
+            })
+            .catch(err => console.log(err))
+
+            
     }
 
     return(

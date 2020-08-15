@@ -12,13 +12,16 @@ const AddBook = (props) => {
 
     // get all authors
     // This has a massive bug. For some reason the state returns undefined. It eventually resolves on its own but it probably wont work when you run the app at first
-    useEffect(() => {
-        if(props.location.state !== null || props.location.state !== undefined || !isUndefined(props.location.state))
+    useEffect(() => {        
+        if(props.location.state === undefined)
         {
-            console.log(props.location);
+            console.log('state is undefined');
+        }
+        else {
+            console.log(props.location.state);
             setAuthors(props.location.state.authors);
         }
-    }, []);
+    }, [props]);
 
     // adds a new book
     const handleAddBook = async (e) => {
@@ -36,7 +39,7 @@ const AddBook = (props) => {
         .post('/book', newBook)
         .then(response => {
             console.log(response);
-            if(!isNull(response.data) && response.status == 200)
+            if(!isNull(response.data) && response.status === 200)
             {
                 setShow(true);
 
@@ -81,13 +84,13 @@ const AddBook = (props) => {
                     show == true ? 
                     <Alert variant="success" onClose={() => setShow(false)}>
                         {name} added to database!
-                    </Alert> : <hidden></hidden>
+                    </Alert> : <br />
                 }
 
                 <Button variant="primary" type="submit" onClick={handleAddBook}>
                     Submit
                 </Button>
-                <Button variant="primary" href="/">
+                <Button variant="primary" href="/" className="ml-2 text-white">
                     Back to Homepage
                 </Button>
             </Form>
