@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Form, Col, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import { isNull } from 'util';
 
 const AddAuthor = (props) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [show, setShow] = useState(false);
 
     // adds a new author
     const handleAddAuthor = async (e) => {
@@ -17,7 +19,19 @@ const AddAuthor = (props) => {
             lastName: lastName
         }
 
-        await axios.post('/author', newAuthor).then(response => console.log(response)).catch(err => console.log(err));
+        await axios
+        .post('/author', newAuthor)
+        .then(response => {
+            if(!isNull(response.data) && response.status == 200)
+            {
+                setShow(true);
+
+                setTimeout(() => {
+                    setShow(false);
+                }, 2000);
+            }
+        })
+        .catch(err => console.log(err));
         
         
     }
@@ -36,6 +50,13 @@ const AddAuthor = (props) => {
                         <Form.Control type="text" placeholder="What is the your last name?" onChange={(e) => setLastName(e.target.value)} required />
                     </Form.Group>
                 </Form.Row>
+
+                {
+                    show == true ? 
+                    <Alert variant="success" onClose={() => setShow(false)}>
+                        Author {firstName} {lastName} added to database!
+                    </Alert> : <hidden></hidden>
+                }
             
                 <Button variant="success" type="submit" onClick={handleAddAuthor}>
                     Submit

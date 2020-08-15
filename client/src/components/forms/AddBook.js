@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Col, Button } from 'react-bootstrap';
+import { Alert, Form, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
-import { isUndefined } from 'util';
+import { isUndefined, isNull } from 'util';
 
 const AddBook = (props) => {
     const [authors, setAuthors] = useState([]);
     const [name, setName] = useState('');
     const [isbn, setISBN] = useState('');
     const [author, setAuthor] = useState('');
+    const [show, setShow] = useState(false);
 
     // get all authors
     // This has a massive bug. For some reason the state returns undefined. It eventually resolves on its own but it probably wont work when you run the app at first
@@ -31,7 +32,20 @@ const AddBook = (props) => {
             author: author
         }
 
-        await axios.post('/book', newBook).then(response => console.log(response)).catch(err => console.log(err));
+        await axios
+        .post('/book', newBook)
+        .then(response => {
+            console.log(response);
+            if(!isNull(response.data) && response.status == 200)
+            {
+                setShow(true);
+
+                setTimeout (() => {
+                    setShow(false);
+                }, 2000);
+            }
+        })
+        .catch(err => console.log(err));
         
         
     }
@@ -62,7 +76,14 @@ const AddBook = (props) => {
                         }
                     </Form.Control>
                 </Form.Row>
-            
+                
+                {
+                    show == true ? 
+                    <Alert variant="success" onClose={() => setShow(false)}>
+                        {name} added to database!
+                    </Alert> : <hidden></hidden>
+                }
+
                 <Button variant="primary" type="submit" onClick={handleAddBook}>
                     Submit
                 </Button>

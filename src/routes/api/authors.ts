@@ -8,8 +8,8 @@ const Author = require('../../models/author.model');
 // @desc Get All Authors
 // @access private
 
-router.get('/authors', (req:Request, res:Response) => {
-    Author.find()
+router.get('/authors', async (req:Request, res:Response) => {
+    await Author.find()
     .sort({date: -1})
     .then((authors: Array<typeof Author>) => {
         console.log(authors);
@@ -22,27 +22,34 @@ router.get('/authors', (req:Request, res:Response) => {
 // @desc ADD a new Author
 // @access private
 
-router.post('/author', (req, res) => {
+router.post('/author', async (req:Request, res:Response) => {
     const newAuthor = new Author({
         firstName: req.body.firstName, 
         lastName: req.body.lastName
     });
 
-    newAuthor.save().then((author: typeof Author) => res.json(author));
+    await newAuthor.save().then((author: typeof Author) => res.json(author));
 });
 
 // @route GET api/author/:id
 // @desc GET an Author
 // @access private
 
-router.get('/author/:id', (req, res) => {
-    Author.findById(req.params.id)
+router.get('/author/:id', async (req:Request, res:Response) => {
+    await Author.findById(req.params.id)
     .then((author: typeof Author) => res.json(author)).then(() => res.json({success: true}))
     .catch((err: any) => { 
         res.status(404).json({success: false});
         console.log('Author not found!');
     })
 });
+
+
+// @route POST to api/authors
+// @desc UPDATES an Author
+// @access private
+
+
 
 
 module.exports = router;
