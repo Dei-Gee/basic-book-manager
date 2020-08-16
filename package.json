@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ayodeji Tolu-ojo",
   "license": "ISC",
   "dependencies": {
     "@types/express": "^4.17.7",
