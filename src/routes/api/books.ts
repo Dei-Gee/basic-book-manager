@@ -53,4 +53,19 @@ router.get('/book/:id', (req, res) => {
 });
 
 
+// @route PUT to api/books
+// @desc UPDATES a Book
+// @access private
+
+router.put('/book/:id', async(req:Request, res:Response) => {
+    const bookId = req.params.id;
+    const updateValues = req.body;
+
+    const options = { runValidators: true }
+
+    await Book.findByIdAndUpdate(bookId, updateValues, options, () => res.json()).catch((err: any) => console.log(err));
+
+});
+
+
 module.exports = router;

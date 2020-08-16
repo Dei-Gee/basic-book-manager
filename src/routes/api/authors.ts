@@ -45,11 +45,19 @@ router.get('/author/:id', async (req:Request, res:Response) => {
 });
 
 
-// @route POST to api/authors
+// @route PUT to api/authors
 // @desc UPDATES an Author
 // @access private
 
+router.put('/author/:id', async(req:Request, res:Response) => {
+    const authorId = req.params.id;
+    const updateValues = req.body;
 
+    const options = { runValidators: true }
+
+    await Author.findByIdAndUpdate(authorId, updateValues, options, () => res.json()).catch((err: any) => console.log(err));
+
+});
 
 
 module.exports = router;

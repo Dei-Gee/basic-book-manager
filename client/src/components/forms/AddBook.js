@@ -11,7 +11,6 @@ const AddBook = (props) => {
     const [show, setShow] = useState(false);
 
     // get all authors
-    // This has a massive bug. For some reason the state returns undefined. It eventually resolves on its own but it probably wont work when you run the app at first
     useEffect(() => {        
         if(props.location.state === undefined)
         {
@@ -69,8 +68,8 @@ const AddBook = (props) => {
                 </Form.Row>
             
                 <Form.Row>                    
-                    <Form.Label>State</Form.Label>
-                    <Form.Control as="select" defaultValue="Choose..." onChange={(e) => setAuthor(e.target.value)}>
+                    <Form.Label>Author</Form.Label>
+                    <Form.Control as="select" defaultValue="Choose..." onChange={(e) => setAuthor(e.target.value)} required>
                         <option>Choose...</option>
                         {
                             authors.map((author, index) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ListGroup, Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
+import { ListGroup, Nav, Navbar } from 'react-bootstrap';
 import axios from 'axios';
 import { isNull } from 'util';
 
@@ -39,6 +39,7 @@ const Books = (props) => {
             .get(`author/${authorId}`)
             .then(response => {
                 thisBookAuthor = {
+                    _id: authorId,
                     firstName: response.data.firstName, 
                     lastName: response.data.lastName
                 }
@@ -94,6 +95,7 @@ const Books = (props) => {
                     <Nav className="w-100 bg-secondary">
                         <Nav.Link href="/book" className="text-light" onClick={handleAddBookClick}>Add Book</Nav.Link>
                         <Nav.Link href="/author" className="text-light">Add Author</Nav.Link>
+                        <Nav.Link href="/authors" className="text-light">View Authors</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
