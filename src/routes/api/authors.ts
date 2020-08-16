@@ -28,7 +28,13 @@ router.post('/author', async (req:Request, res:Response) => {
         lastName: req.body.lastName
     });
 
-    await newAuthor.save().then((author: typeof Author) => res.json(author));
+    await newAuthor.save((err:any) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(newAuthor);
+        }
+    });
 });
 
 // @route GET api/author/:id

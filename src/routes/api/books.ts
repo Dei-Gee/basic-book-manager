@@ -29,13 +29,13 @@ router.post('/book', (req, res) => {
         author: req.body.author
     });
     
-newBook.save((err:any) => {
-    if (err) {
-        res.send(err);
-      } else {
-        res.send(newBook);
-      }
-}).then((book: typeof Book) => res.json(book));
+    newBook.save((err:any) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(newBook);
+        }
+    });
 });
 
 // @route GET api/book/:id

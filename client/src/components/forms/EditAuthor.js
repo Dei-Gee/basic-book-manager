@@ -1,49 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Col, Button, Alert } from 'react-bootstrap';
-import axios from 'axios';
-import { isNull } from 'util';
+import { getAuthorById, updateAuthorById } from '../../actions/actions';
 
 const EditAuthor = (props) => {
     const [thisAuthor, setThisAuthor] = useState({});
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [show, setShow] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [success, setSuccess] = useState(false);
 
+    /* FUNCTIONS */
+    //  load all data
+    const loadAllData = async () => {
+        const a = await getAuthorById(props.match.params.id);;
+
+        // set data to state
+        setThisAuthor(a);
+        setFirstName(a.firstName);
+        setLastName(a.lastName);
+    }
+
+    /* USE EFFECT HOOK */
     useEffect(() => {
-        if (props.location.state === undefined) {
-            console.log('state is uendefined');
-        } else {
-            console.log(props.location.state);
-            setThisAuthor(props.location.state.author);
-            setFirstName(props.location.state.author.firstName);
-            setLastName(props.location.state.author.lastName);
-        }
+        loadAllData();
     }, [props])
 
     // edit this specific author
     const handleUpdateAuthor = async (e) => {
         e.preventDefault();
-        let newAuthor = {};
-        console.log(firstName, lastName);
-        
-        newAuthor = {
+
+        // update data
+        let newAuthor = {
             firstName: firstName, 
             lastName: lastName
         }
 
-        await axios
-        .put(`/author/${props.location.state.author._id}`, newAuthor)
-        .then(response => {
-            if(!isNull(response.data) && response.status === 200)
-            {
-                setShow(true);
+        const updateAuthor = await updateAuthorById(props.match.params.id, newAuthor);
 
-                setTimeout(() => {
-                    setShow(false);
-                }, 2000);
-            }
-        })
-        .catch(err => console.log(err));
+        // check if update was successful
+        if(updateAuthor === true)
+        {
+            setShowAlert(true);
+            setSuccess(true);
+
+            setTimeout (() => {
+                setShowAlert(false);
+            }, 2000);
+
+            // back to list of authors
+            setTimeout (() => {
+                props.history.push(`/authors`);
+            }, 3500);
+
+        }
+        else
+        {
+            setShowAlert(true);
+            setSuccess(false);
+
+            setTimeout (() => {
+                setShowAlert(false);
+            }, 2000);
+        }        
         
         
     }
@@ -64,10 +82,16 @@ const EditAuthor = (props) => {
                 </Form.Row>
 
                 {
-                    show == true ? 
-                    <Alert variant="success" onClose={() => setShow(false)}>
-                        Author {firstName} {lastName} updated!
-                    </Alert> : <br />
+                    // conditional render of user feedback
+                    showAlert == true ? 
+                        success === true ?
+                            <Alert variant="success" onClose={() => setShowAlert(true)}>
+                                {firstName} {lastName} updated!
+                            </Alert> : 
+                            <Alert variant="danger" onClose={() => setShowAlert(true)}>
+                                Error! {firstName} {lastName} could not be updated!
+                            </Alert>
+                     : <br />
                 }
             
                 <Button variant="success" type="submit" onClick={handleUpdateAuthor}>

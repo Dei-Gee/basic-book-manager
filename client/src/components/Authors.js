@@ -1,65 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { ListGroup, Nav, Navbar, Button } from 'react-bootstrap';
-import axios from 'axios';
-import { isNull } from 'util';
+import { getAllAuthors } from '../actions/actions';
 
 
 const Authors = (props) => {
-    const [authors, setAuthors] = useState([]);
+    const [allAuthors, setAllAuthors] = useState([]);
 
-    // get all authors
+    /* FUNCTIONS */
+    //  load all data
+    const loadAllData = async () => {
+        const a = await getAllAuthors();
+
+        // set data to state
+        setAllAuthors(a);
+    }
+
+    /* USE EFFECT HOOK */
     useEffect(() => {
         const timer = setInterval(() => {
-            axios
-            .get('/authors')
-            .then((response) => {
-                setAuthors(response.data);
-            })
-            .catch((err) => console.log(err));
-            }, 1000);
+            loadAllData();
+        }, 1000);
 
-            // cleanup
-            return () => clearInterval(timer);
+        // cleanup
+        return () => clearInterval(timer);
     }, [props]);
 
     // Function to handle when you click the button to edit an author
     const handleEditAuthorClick = async (e) => {
         e.preventDefault();
-        console.log(e.target.getAttribute('authorid'));
 
+        // get author id from user defined target attribute
         let authorId = e.target.getAttribute('authorid');
-
-        // get specific author
-        let thisAuthor= authors.find((a) => a._id === authorId);
-
-
-
-            props.history.push(`author/${authorId}`, 
-            {
-                author: thisAuthor
-            });
+        
+        // pass props to next component 
+        props.history.push(`author/${authorId}`);
     }
 
-
-    // Function to handle when you click the button to add a new book
+    // go to the create book form
     const handleAddBookClick = async (e) => {
         e.preventDefault();
-        await axios
-            .get('authors')
-            .then(response => {
-                if(!isNull(response.data) && response.status === 200)
-                {
-                    props.history.push({
-                        pathname: 'book', 
-                        state: {
-                         authors: response.data
-                        }
-                    })
-                }
-            })
-            .catch(err => console.log(err))
-
-            
+        
+        props.history.push({
+            pathname: 'book'
+        })    
     }
 
     return(
@@ -78,7 +61,7 @@ const Authors = (props) => {
 
             <ListGroup variant="flush">
                 {
-                    authors.map((author, index) => {
+                    allAuthors.map((author, index) => {
                         console.log(author);
                         return  <ListGroup.Item className="d-flex text-success justify-content-between" key={index}>
                                     <div className="bg-transparent text-success py-2">{author.firstName} {author.lastName}</div>

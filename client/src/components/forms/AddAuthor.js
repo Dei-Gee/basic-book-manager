@@ -1,37 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Col, Button, Alert } from 'react-bootstrap';
-import axios from 'axios';
-import { isNull } from 'util';
+import { createAuthor } from '../../actions/actions';
 
 const AddAuthor = (props) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [show, setShow] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     // adds a new author
     const handleAddAuthor = async (e) => {
         e.preventDefault();
-        let newAuthor = {};
-        console.log(firstName, lastName);
-        
-        newAuthor = {
+
+        // new author data
+        let newAuthor = {
             firstName: firstName, 
             lastName: lastName
         }
 
-        await axios
-        .post('/author', newAuthor)
-        .then(response => {
-            if(!isNull(response.data) && response.status === 200)
-            {
-                setShow(true);
+        // send request
+        const createNewAuthor = await createAuthor(newAuthor);
 
-                setTimeout(() => {
-                    setShow(false);
-                }, 2000);
-            }
-        })
-        .catch(err => console.log(err));
+        // check if request succeeded
+        if(createNewAuthor === true) {
+            setShow(true);
+            setSuccess(true);
+            setTimeout (() => {
+                setShow(false);
+            }, 2000);
+        }
+        else{
+            setShow(true);
+            setSuccess(false);
+            setTimeout (() => {
+                setShow(false);
+            }, 2000);
+        }
+
+
         
         
     }
@@ -52,17 +58,26 @@ const AddAuthor = (props) => {
                 </Form.Row>
 
                 {
-                    show == true ? 
-                    <Alert variant="success" onClose={() => setShow(false)}>
-                        Author {firstName} {lastName} added to database!
-                    </Alert> : <br />
+                    // conditional render of user feedback
+                    show === true ? 
+                        success === true ?
+                            <Alert variant="success" onClose={() => setShow(true)}>
+                                Author {firstName} {lastName} added to database!
+                            </Alert> : 
+                            <Alert variant="danger" onClose={() => setShow(true)}>
+                                Error! {firstName} {lastName} could not be added to database!
+                            </Alert>
+                     : <br />
                 }
             
-                <Button variant="success" type="submit" onClick={handleAddAuthor}>
+                <Button variant="primary" type="submit" onClick={handleAddAuthor}>
                     Submit
                 </Button>
-                <Button variant="outline-success" href="/" className="ml-2 text-white">
-                    Back to Homepage
+                <Button variant="outline-primary" href="/authors" className="ml-2 text-white">
+                    View Authors
+                </Button>
+                <Button variant="outline-primary" href="/" className="ml-2 text-white">
+                    View Books
                 </Button>
             </Form>
         </div>

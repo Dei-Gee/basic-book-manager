@@ -1,89 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import { ListGroup, Nav, Navbar } from 'react-bootstrap';
-import axios from 'axios';
-import { isNull } from 'util';
+import { getAllBooks, getBookById, getAuthorById } from '../actions/actions';
+import { isNullOrUndefined } from 'util';
 
 const Books = (props) => {
     // set state
     const [allBooks, setAllBooks] = useState([]);
 
+    /* FUNCTIONS */
+    //  load all data
+    const loadAllData = async () => {
+        const b = await getAllBooks();
+
+        // set data to state
+        setAllBooks(b);
+    }
     
+    /* USE EFFECT HOOK */
     useEffect(() => {
-        // get all books
+
+        // get books every second
         const timer = setInterval(() => {
-            axios
-            .get('books')
-            .then(response => {
-                setAllBooks(response.data);
-            })
-            .catch(err => console.log(err));
-          }, 1000);
+            loadAllData();
+        }, 1000);
 
         // clearing interval
         return () => clearInterval(timer);
     }, []);
 
-    // display details about book
-
+    // display details about each book in the next component
     const handleClick = async (e) => {
         e.preventDefault();
-        console.log(e.target.getAttribute('_id'));
 
+        // get IDs
         let bookId = e.target.getAttribute('_id');
         let authorId = e.target.getAttribute('authorid');
 
-        let thisBook = {};
-        let thisBookAuthor = {};
+        // fetch data using IDs
+        const thisBook = await getBookById(bookId);
+        const thisBookAuthor = await getAuthorById(authorId);
 
-        await axios
-            .get(`author/${authorId}`)
-            .then(response => {
-                thisBookAuthor = {
-                    _id: authorId,
-                    firstName: response.data.firstName, 
-                    lastName: response.data.lastName
-                }
-            })
-            .catch(err => console.log(err));
-
-        // get specific book
-        await axios
-            .get(`book/${bookId}`)
-            .then(response => {
-                thisBook = {
-                    name: response.data.name, 
-                    isbn: response.data.isbn, 
-                }
-            })
-            .catch(err => console.log(err));
-
-
+        if(!isNullOrUndefined(thisBook) && !isNullOrUndefined(thisBookAuthor))
+        {
+            // push data as props to next component
             props.history.push(`book/${bookId}`, 
             {
                 book: thisBook, 
                 author: thisBookAuthor
             });
+        }
+
+       
     }
 
+    // go to the create book form
     const handleAddBookClick = async (e) => {
         e.preventDefault();
-        // let authorsArray = [];
-        await axios
-            .get('authors')
-            .then(response => {
-                if(!isNull(response.data) && response.status === 200)
-                {
-                    props.history.push({
-                        pathname: 'book', 
-                        state: {
-                         authors: response.data
-                        }
-                    })
-                }
-            })
-            .catch(err => console.log(err))
-
-            
+        
+        props.history.push({
+            pathname: 'book'
+        })    
     }
 
     return(

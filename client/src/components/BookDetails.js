@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Form, Col, Alert } from 'react-bootstrap';
-import { isNull } from 'util';
-import axios from 'axios';
+import { getAllAuthors, getAuthorById, updateBookById, getBookById } from '../actions/actions';
 
 const BookDetails = (props) => {
     // set state
@@ -12,62 +11,79 @@ const BookDetails = (props) => {
     const [authorId, setAuthorId] = useState('');
     const [name, setName] = useState('');
     const [isbn, setISBN] = useState('');
-    const [authors, setAuthors] = useState([]);
+    const [allAuthors, setAllAuthors] = useState([]);
+    const [success, setSuccess] = useState(false);
+
+    /* FUNCTIONS */
+    //  load all data
+    const loadAllData = async () => {
+        const a = await getAllAuthors();
+        const bookById = await getBookById(props.match.params.id);
+        const authorById = await getAuthorById(props.location.state.author._id);
+
+        // set data to state
+        setAllAuthors(a);
+        setBook(bookById);
+        setAuthor(authorById);
+        setAuthorId(authorById._id);
+        setName(props.location.state.book.name);
+        setISBN(props.location.state.book.isbn);
+    }
 
     // get details of book
     useEffect(() => {
-
-        let isMounted = true; // note this flag denote mount status
-        if(isMounted)
-        {
-            setBook(props.location.state.book);
-            setAuthor(props.location.state.author);
-            setAuthorId(props.location.state.author._id);
-            setName(props.location.state.book.name);
-            setISBN(props.location.state.book.isbn);
-
-            axios
-            .get('/authors')
-            .then((response) => {
-                setAuthors(response.data);
-            })
-            .catch((err) => console.log(err));
-        }
-        return () => { isMounted = false }; // use effect cleanup to set flag false, if unmounted
-
-        
+        loadAllData();
     }, [props]);
 
     // edit this specific book
     const handleUpdateBook = async (e) => {
         e.preventDefault();
-        let newBook = {};
-        console.log(name, isbn, authorId);
-        
-        newBook = {
+
+        // data for updating the book
+        let newBook = {
             name: name, 
             isbn: isbn, 
             author: authorId
         }
 
-        await axios
-        .put(`/book/${props.match.params.id}`, newBook)
-        .then(response => {
-            if(!isNull(response.data) && response.status === 200)
-            {
-                setShowAlert(true);
+        // send request to update
+        const updateBook = await updateBookById(props.match.params.id, newBook);
 
-                setTimeout(() => {
-                    setShowAlert(false);
-                    setShowCard(true);
-                }, 2000);
-            }
-        })
-        .catch(err => console.log(err));
-        
-        
+        // check if update was successful
+        if(updateBook === true)
+        {
+            setShowAlert(true);
+            setSuccess(true);
+
+            setTimeout (() => {
+                setShowAlert(false);
+            }, 2000);
+
+            // get updated book
+            const updated = await getBookById(book._id);
+            // get new author of the book
+            const updatedA = await getAuthorById(updated.author);
+
+            console.log(updated);
+            // push data as props to next component
+            props.history.push(`/book/${book._id}`, 
+            {
+                book: updated, 
+                author: updatedA
+            });
+            setShowCard(true);
+
+        }
+        else
+        {
+            setShowAlert(true);
+            setSuccess(false);
+
+            setTimeout (() => {
+                setShowAlert(false);
+            }, 2000);
+        }        
     }
-    console.log(author);
 
     return(
         <div className="container">
@@ -103,17 +119,23 @@ const BookDetails = (props) => {
                         <Form.Control as="select" onChange={(e) => setAuthorId(e.target.value)} defaultValue={author._id} required>
                             <option>Choose...</option>
                             {
-                                authors.map((author, index) => {
+                                allAuthors.map((author, index) => {
                                     return <option key={index} value={author._id}>{author.firstName} {author.lastName}</option>
                                 })
                             }
                         </Form.Control>
                     </Form.Row>
                     {
+                        // conditional render of user feedback
                         showAlert == true ? 
-                        <Alert variant="success" onClose={() => setShowAlert(false)}>
-                            ({name}) updated!
-                        </Alert> : <br />
+                            success === true ?
+                                <Alert variant="success" onClose={() => setShowAlert(true)}>
+                                    {name} updated!
+                                </Alert> : 
+                                <Alert variant="danger" onClose={() => setShowAlert(true)}>
+                                    Error! {name} could not be updated!
+                                </Alert>
+                         : <br />
                     }
                 
                     <Button variant="success" type="submit" onClick={handleUpdateBook}>
