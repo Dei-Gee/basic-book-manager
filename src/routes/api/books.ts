@@ -22,7 +22,7 @@ router.get('/books', (req:Request, res:Response) => {
 // @desc ADD a new Book
 // @access private
 
-router.post('/book', (req, res) => {
+router.post('/book', (req:Request, res:Response) => {
     const newBook = new Book({
         name: req.body.name, 
         isbn: req.body.isbn, 
@@ -42,7 +42,7 @@ router.post('/book', (req, res) => {
 // @desc GET a Book
 // @access private
 
-router.get('/book/:id', (req, res) => {
+router.get('/book/:id', (req:Request, res:Response) => {
     Book.findById(req.params.id)
     .then((book: typeof Book) => res.json(book)).then(() => res.json({success: true}))
     .catch((err: any) => { 
