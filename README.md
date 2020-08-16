@@ -15,10 +15,8 @@ MongoDB (Database - hosted on mlab)
 * npm run dev-server (runs only the backend)\
 
 ## Commentary
-I was able to implement most of the requirements here [Holidog Full Stack Challenge](https://github.com/Holidog-com/Full-stack-challenge). The api endpoints all work >perfectly. I didn't have time to implement the bonus api endpoints (i.e. for PUT requests).
+I was able to implement all of the requirements here [Holidog Full Stack Challenge](https://github.com/Holidog-com/Full-stack-challenge). The api endpoints all work >perfectly. I was also able to implement the bonus api endpoints (i.e. for PUT requests). i Wasn't able to write tests in time.
 
 #### Problems (Bugs, Errors and Warnings)
-* There is a bug that occurs when you go from the 'book list' to the 'add book' form. For some reason, the state returns undefined when I push the array of books to the state of the 'add book' component. There is a most\
-likely a more efficient way of doing this but i was short on time.
-* There is an "Unhandled Promise Rejection" Warning. It doesn't seem to have any noticeable effect on performance.
+* There is an "Unhandled Promise Rejection" Warning. It doesn't seem to have any noticeable effect on performance. (<--> This is probably because of the lack of catch clauses in my requests and promises)
 * There is no error component so if you type a random component like '/test' it won't take you to an error page. It just won't load any information beyond the standard App.js component
