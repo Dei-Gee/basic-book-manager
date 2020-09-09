@@ -8,7 +8,7 @@ const Book = require('../../models/book.model');
 // @desc Get All books
 // @access public
 
-router.get('/books', (req:Request, res:Response) => {
+router.get('/api/books', (req:Request, res:Response) => {
     Book.find()
     .sort({date: -1})
     .then((books: Array<typeof Book>) => {
@@ -22,7 +22,7 @@ router.get('/books', (req:Request, res:Response) => {
 // @desc ADD a new Book
 // @access private
 
-router.post('/book', (req:Request, res:Response) => {
+router.post('/api/book', (req:Request, res:Response) => {
     const newBook = new Book({
         name: req.body.name, 
         isbn: req.body.isbn, 
@@ -42,7 +42,7 @@ router.post('/book', (req:Request, res:Response) => {
 // @desc GET a Book
 // @access private
 
-router.get('/book/:id', (req:Request, res:Response) => {
+router.get('/api/book/:id', (req:Request, res:Response) => {
     Book.findById(req.params.id)
     .then((book: typeof Book) => res.json(book)).then(() => res.json({success: true}))
     .catch((err: any) => { 
@@ -57,7 +57,7 @@ router.get('/book/:id', (req:Request, res:Response) => {
 // @desc UPDATES a Book
 // @access private
 
-router.put('/book/:id', async(req:Request, res:Response) => {
+router.put('/api/book/:id', async(req:Request, res:Response) => {
     const bookId = req.params.id;
     const updateValues = req.body;
 
