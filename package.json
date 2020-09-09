@@ -10,7 +10,8 @@
     "dev": "./node_modules/.bin/concurrently \"npm run dev-server\" \"npm run client\"",
     "dev-server": "npm run build && nodemon dist/server.js --ignore client",
     "server": "node dist/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1", 
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run dev-server && npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
   "author": "Ayodeji Tolu-ojo",
