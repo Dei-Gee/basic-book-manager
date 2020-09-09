@@ -19,7 +19,7 @@ const Book = require('../../models/book.model');
 // @route GET api/books
 // @desc Get All books
 // @access public
-router.get('/books', (req, res) => {
+router.get('/api/books', (req, res) => {
     Book.find()
         .sort({ date: -1 })
         .then((books) => {
@@ -30,7 +30,7 @@ router.get('/books', (req, res) => {
 // @route POST to api/books
 // @desc ADD a new Book
 // @access private
-router.post('/book', (req, res) => {
+router.post('/api/book', (req, res) => {
     const newBook = new Book({
         name: req.body.name,
         isbn: req.body.isbn,
@@ -48,7 +48,7 @@ router.post('/book', (req, res) => {
 // @route GET api/book/:id
 // @desc GET a Book
 // @access private
-router.get('/book/:id', (req, res) => {
+router.get('/api/book/:id', (req, res) => {
     Book.findById(req.params.id)
         .then((book) => res.json(book)).then(() => res.json({ success: true }))
         .catch((err) => {
@@ -60,7 +60,7 @@ router.get('/book/:id', (req, res) => {
 // @route PUT to api/books
 // @desc UPDATES a Book
 // @access private
-router.put('/book/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/api/book/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookId = req.params.id;
     const updateValues = req.body;
     const options = { runValidators: true };

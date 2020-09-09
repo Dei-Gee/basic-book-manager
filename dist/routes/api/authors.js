@@ -19,7 +19,7 @@ const Author = require('../../models/author.model');
 // @route GET api/authors
 // @desc Get All Authors
 // @access private
-router.get('/authors', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/api/authors', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield Author.find()
         .sort({ date: -1 })
         .then((authors) => {
@@ -30,7 +30,7 @@ router.get('/authors', (req, res) => __awaiter(void 0, void 0, void 0, function*
 // @route POST to api/authors
 // @desc ADD a new Author
 // @access private
-router.post('/author', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/api/author', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newAuthor = new Author({
         firstName: req.body.firstName,
         lastName: req.body.lastName
@@ -47,7 +47,7 @@ router.post('/author', (req, res) => __awaiter(void 0, void 0, void 0, function*
 // @route GET api/author/:id
 // @desc GET an Author
 // @access private
-router.get('/author/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/api/author/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield Author.findById(req.params.id)
         .then((author) => res.json(author)).then(() => res.json({ success: true }))
         .catch((err) => {
@@ -58,7 +58,7 @@ router.get('/author/:id', (req, res) => __awaiter(void 0, void 0, void 0, functi
 // @route PUT to api/authors
 // @desc UPDATES an Author
 // @access private
-router.put('/author/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/api/author/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const authorId = req.params.id;
     const updateValues = req.body;
     const options = { runValidators: true };
