@@ -12,7 +12,7 @@
     "server": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
-    "postinstall": "tsc", 
+    "postinstall": "tsc",
     "start": "./node_modules/.bin/concurrently \"npm run dev-server\" \"npm run client\""
   },
   "keywords": [],
@@ -30,8 +30,5 @@
     "mongoose": "^5.9.29",
     "path": "^0.12.7",
     "typescript": "^4.0.2"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
   }
 }
