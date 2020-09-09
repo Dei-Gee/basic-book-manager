@@ -22,13 +22,25 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+// serve static folder according to node environment
+if(process.env.NODE_ENV === 'production')
+{
+    app.use(express.static('client/build'));
 
-app.use(express.static('static'))
+    app.get('/', (req:Request, res:Response) => {
+        res
+            .sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
+else if (process.env.NODE_ENV === 'development') 
+{
+    app.use(express.static('static'));
 
-app.get('/', (req:Request, res:Response) => {
-    res
-        .sendFile(path.join(__dirname+'index.html'));
-});
+    app.get('/', (req:Request, res:Response) => {
+        res
+            .sendFile(path.join(__dirname+'index.html'));
+    });
+}
 
 
 app.use('', booksRouter);
