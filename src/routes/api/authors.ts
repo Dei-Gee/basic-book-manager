@@ -8,7 +8,7 @@ const Author = require('../../models/author.model');
 // @desc Get All Authors
 // @access private
 
-router.get('/api/authors', async (req:Request, res:Response) => {
+router.get('api/authors', async (req:Request, res:Response) => {
     await Author.find()
     .sort({date: -1})
     .then((authors: Array<typeof Author>) => {
@@ -22,7 +22,7 @@ router.get('/api/authors', async (req:Request, res:Response) => {
 // @desc ADD a new Author
 // @access private
 
-router.post('/api/author', async (req:Request, res:Response) => {
+router.post('api/author', async (req:Request, res:Response) => {
     const newAuthor = new Author({
         firstName: req.body.firstName, 
         lastName: req.body.lastName
@@ -41,7 +41,7 @@ router.post('/api/author', async (req:Request, res:Response) => {
 // @desc GET an Author
 // @access private
 
-router.get('/api/author/:id', async (req:Request, res:Response) => {
+router.get('api/author/:id', async (req:Request, res:Response) => {
     await Author.findById(req.params.id)
     .then((author: typeof Author) => res.json(author)).then(() => res.json({success: true}))
     .catch((err: any) => { 
@@ -55,7 +55,7 @@ router.get('/api/author/:id', async (req:Request, res:Response) => {
 // @desc UPDATES an Author
 // @access private
 
-router.put('/api/author/:id', async(req:Request, res:Response) => {
+router.put('api/author/:id', async(req:Request, res:Response) => {
     const authorId = req.params.id;
     const updateValues = req.body;
 
